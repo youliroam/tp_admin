@@ -15,12 +15,19 @@ use think\facade\View;
 
 class Home extends Auth
 {
+    public $user_info;
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
+        $this->user_info = $this->get_user_info();
+    }
+
     //管理系统主页面（菜单页面）
     public function index(){
 
 
         $data = [
-            'menu' => []
+            'user_info' => $this->user_info
         ];
 
         return View::fetch('index',$data);
@@ -28,9 +35,8 @@ class Home extends Auth
 
     //管理系统内部页面
     public function home(){
-        $user_info = $this->get_user_info();
         $data = [
-            'user_info' => $user_info
+            'user_info' => $this->user_info
         ];
 
         return View::fetch('home',$data);
