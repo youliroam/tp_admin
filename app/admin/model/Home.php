@@ -14,9 +14,8 @@ use think\facade\Db;
 class Home
 {
 
-    public $res = [];
+    //获取菜单
     public function menu(){
-
         $data = Db::table('sys_menu')->where(['status'=>1])->order('sort','asc')->select()->toArray();
         if($data){
             return $this->menu_handle($data);
@@ -29,7 +28,7 @@ class Home
         return $this->dg($data,0);
     }
 
-
+    //递归查询所有子菜单
     private function dg($data,$parent_id){
         $res = [];
         foreach($data as $k=>$vv){
