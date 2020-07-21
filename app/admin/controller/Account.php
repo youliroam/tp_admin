@@ -12,6 +12,7 @@ namespace app\admin\controller;
 use app\BaseController;
 use think\facade\Session;
 use think\facade\View;
+use app\admin\model\Account as AccountModel;
 
 class Account
 {
@@ -40,16 +41,24 @@ class Account
         try{
             $username = input('post.username');
             $password = input('post.password');
+            $verify_code = input('post.verify_code');
 
-            $login_flag = true;
-            if($username != 'admin' && $password != '123456'){
-                $login_flag = false;
+            $verify_code_service = Session::get('VerifyCode');
+
+            if(!is_set_parameter([$username,$password,$verify_code])){
+                throw_error(40001,'参数错误');
             }
-            if($login_flag){
-                Session::set('user_info',['username'=>$username,'password'=>$password]);
-                return json_success();
+
+            if($verify_code != $verify_code_service){
+                dump($verify_code,$verify_code_service);
+                throw_error(40002,'验证码错误');
             }
-            return json_error(0,'密码错误');
+
+            if($username != 'admin' || $password != '123456'){
+                throw_error(40003,'密码错误');
+            }
+            Session::set('user_info',['username'=>$username,'password'=>$password]);
+            return json_success();
         }catch(\Exception $e){
             return json_error($e->getCode(),$e->getMessage());
         }
@@ -62,6 +71,13 @@ class Account
         return redirect('/admin/account/login');
     }
 
+    //图形验证码
+    public function graphic_verification(){
+
+        $account = new AccountModel();
+        $a = $account->vCode(4,20);
+        return $a;
+    }
 
 
     //密码设置
