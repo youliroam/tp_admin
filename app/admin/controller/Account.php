@@ -84,12 +84,5 @@ class Account
     }
 
 
-    //密码设置
-    public function password(){
-        $res = [];
-        return View::fetch('password',$res);
-    }
-
-
 
 }
