@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>管理系统</title>
+    <link href="/static/css//login.css?v=2" rel="stylesheet" type="text/css">
+    <style>
+        .J_codeimg{z-index:-1;position:absolute;}
+        .yanzhengma{
+            margin-left: 20px;
+            width: 100px;
+            height: 44px;
+        }
+    </style>
+
+    <style id="tsbrowser_video_independent_player_style" type="text/css">
+          [tsbrowser_force_max_size] {
+            width: 100% !important;
+            height: 100% !important;
+            left: 0px !important;
+            top: 0px !important;
+            margin: 0px !important;
+            padding: 0px !important;
+            transform: none !important;
+          }
+          [tsbrowser_force_fixed] {
+            position: fixed !important;
+            z-index: 9999 !important;
+            background: black !important;
+          }
+          [tsbrowser_force_hidden] {
+            opacity: 0 !important;
+            z-index: 0 !important;
+          }
+          [tsbrowser_hide_scrollbar] {
+            overflow: hidden !important;
+          }
+          [tsbrowser_display_none] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+          }
+          [tsbrowser_force_show] {
+            display: black !important;
+            visibility: visible !important;
+            opacity: 0;
+          }
+    </style>
+</head>
+<body>
+<div class="login-box" id="demo">
+   <div class="input-content">
+     <div class="login_tit">
+          <div>
+            <i class="tit-bg left"></i>
+              YOULIROAM · 后台管理系统
+            <i class="tit-bg right"></i>
+          </div>
+          <p>提高效率</p>
+     </div>    
+     <p class="p user_icon">
+       <input type="text" placeholder="账号" autocomplete="off" class="login_txtbx" id="username">
+     </p> 
+     <p class="p pwd_icon">
+       <input type="text" placeholder="密码" autocomplete="off" class="login_txtbx" id="password">
+     </p>     	
+     <div class="p val_icon">
+        <div class="checkcode">
+          <input type="text" id="J_codetext" placeholder="验证码" autocomplete="off" maxlength="4" class="login_txtbx">
+          <!--<canvas class="J_codeimg" id="myCanvas" onclick="createCode()" onselectstart="return false">对不起，您的浏览器不支持canvas，请下载最新版浏览器!</canvas>-->
+           <img class="yanzhengma" src=''/>
+        </div>
+        <!--<a class="ver_btn" onclick="createCode();" onselectstart="return false">看不清，换一张</a>-->
+        <a class="ver_btn" onclick="create_code();" onselectstart="return false">看不清 换一张</a>
+      </div>      
+      <div class="signup">
+      	  <a id="login-btn" class="gv" href="javascript:void(0)">登&nbsp;&nbsp;录</a>
+          <a id="clear-btn" class="gv" href="javascript:void(0)">清&nbsp;&nbsp;空</a>
+     </div>
+  </div>
+  <div class="canvaszz"> </div>
+  <canvas id="canvas" width="1920" height="881"></canvas> 
+</div>
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        //登录
+        $('#login-btn').on('click',function(){
+            var verify_code = $('#J_codetext').val().trim();
+            var username = $('#username').val().trim();
+            var password = $('#password').val().trim();
+            $.ajax({
+                type:'post',
+                url:"/admin/account/login_handle",
+                data: {username:username,password:password,verify_code:verify_code},
+                success:function(result){
+                    var json_result = JSON.parse(result);
+                    if(json_result.code == 1){
+                        //获取验证码成功
+                        top.location.href='/admin/home/index';
+                    }else{
+                        console.log(json_result);
+                    }
+                }
+            });
+        });
+
+        //清空
+        $('#clear-btn').on('click',function(){
+            $('#username').val('');
+            $('#password').val('');
+            $('#J_codetext').val('');
+            create_code();
+        });
+
+    });
+</script>
+<script>
+//宇宙特效
+
+var canvas = document.getElementById('canvas'),
+  ctx = canvas.getContext('2d'),
+  w = canvas.width = window.innerWidth,
+  h = canvas.height = window.innerHeight,
+
+  hue = 217,
+  stars = [],
+  count = 0,
+  maxStars = 2500;//星星数量
+
+var canvas2 = document.createElement('canvas'),
+  ctx2 = canvas2.getContext('2d');
+canvas2.width = 100;
+canvas2.height = 100;
+var half = canvas2.width / 2,
+  gradient2 = ctx2.createRadialGradient(half, half, 0, half, half, half);
+gradient2.addColorStop(0.025, '#CCC');
+gradient2.addColorStop(0.1, 'hsl(' + hue + ', 61%, 33%)');
+gradient2.addColorStop(0.25, 'hsl(' + hue + ', 64%, 6%)');
+gradient2.addColorStop(1, 'transparent');
+
+ctx2.fillStyle = gradient2;
+ctx2.beginPath();
+ctx2.arc(half, half, half, 0, Math.PI * 2);
+ctx2.fill();
+
+// End cache
+
+function random(min, max) {
+  if (arguments.length < 2) {
+    max = min;
+    min = 0;
+  }
+
+  if (min > max) {
+    var hold = max;
+    max = min;
+    min = hold;
+  }
+
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function maxOrbit(x, y) {
+  var max = Math.max(x, y),
+    diameter = Math.round(Math.sqrt(max * max + max * max));
+  return diameter / 2;
+  //星星移动范围，值越大范围越小，
+}
+
+var Star = function() {
+
+  this.orbitRadius = random(maxOrbit(w, h));
+  this.radius = random(60, this.orbitRadius) / 18; 
+  //星星大小
+  this.orbitX = w / 2;
+  this.orbitY = h / 2;
+  this.timePassed = random(0, maxStars);
+  this.speed = random(this.orbitRadius) / 500000; 
+  //星星移动速度
+  this.alpha = random(2, 10) / 10;
+
+  count++;
+  stars[count] = this;
+}
+
+Star.prototype.draw = function() {
+  var x = Math.sin(this.timePassed) * this.orbitRadius + this.orbitX,
+    y = Math.cos(this.timePassed) * this.orbitRadius + this.orbitY,
+    twinkle = random(10);
+
+  if (twinkle === 1 && this.alpha > 0) {
+    this.alpha -= 0.05;
+  } else if (twinkle === 2 && this.alpha < 1) {
+    this.alpha += 0.05;
+  }
+
+  ctx.globalAlpha = this.alpha;
+  ctx.drawImage(canvas2, x - this.radius / 2, y - this.radius / 2, this.radius, this.radius);
+  this.timePassed += this.speed;
+}
+
+for (var i = 0; i < maxStars; i++) {
+  new Star();
+}
+
+function animation() {
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.globalAlpha = 0.5; //尾巴
+  ctx.fillStyle = 'hsla(' + hue + ', 64%, 6%, 2)';
+  ctx.fillRect(0, 0, w, h)
+
+  ctx.globalCompositeOperation = 'lighter';
+  for (var i = 1, l = stars.length; i < l; i++) {
+    stars[i].draw();
+  };
+
+  window.requestAnimationFrame(animation);
+}
+
+animation();
+
+create_code();
+
+function create_code(){
+    $('.yanzhengma').attr('src','/admin/account/graphic_verification?v='+Math.random());
+}
+
+
+
+</script>
+</body>
+</html>
