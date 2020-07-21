@@ -10,6 +10,7 @@ namespace app\admin\controller;
 
 
 use app\BaseController;
+use think\facade\Db;
 use think\facade\Session;
 use think\facade\View;
 use app\admin\model\Account as AccountModel;
@@ -48,12 +49,16 @@ class Account
                 throw_error(40001,'参数错误');
             }
 
+            $user = Db::table('u_admin')->where(['username'=>$username])->find();
+            if(!$user){
+                throw_error(40004,'用户不存在');
+            }
+
             if($verify_code != $verify_code_service){
-                dump($verify_code,$verify_code_service);
                 throw_error(40002,'验证码错误');
             }
 
-            if($username != 'admin' || $password != '123456'){
+            if(md5($password) != $user['password']){
                 throw_error(40003,'密码错误');
             }
             Session::set('user_info',['username'=>$username,'password'=>$password]);

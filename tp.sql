@@ -65,22 +65,22 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for sys_item
+-- Table structure for u_admin
 -- ----------------------------
-DROP TABLE IF EXISTS `sys_item`;
-CREATE TABLE `sys_item`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `item_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '系统各种配置项',
-  `item_val` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '系统各种配置值',
-  `item_type` tinyint(1) NULL DEFAULT 1 COMMENT '1:后台配置，2：前端配置',
+DROP TABLE IF EXISTS `u_admin`;
+CREATE TABLE `u_admin`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `login_laster_time` bigint(20) NULL DEFAULT NULL,
+  `ip` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of sys_item
+-- Records of u_admin
 -- ----------------------------
-INSERT INTO `sys_item` VALUES (1, 'sys_back_name', 'youliraom管理系统后台', 1);
+INSERT INTO `u_admin` VALUES (1, 'youli', 'e10adc3949ba59abbe56e057f20f883e', 20200722144320, '127.0.0.1');
 
 SET FOREIGN_KEY_CHECKS = 1;
-
 
