@@ -16,8 +16,9 @@
 
     <![endif]-->
 
-    <script src="/static/js/hm.js"></script><script type="text/javascript" src="/static/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <script src="/static/js/hm.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <!--<script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>-->
     <script type="text/javascript">
         $(document).ready(function () {
             function fixHeight() {
@@ -120,13 +121,13 @@
 <div id="switcher">
     <div class="center">
         <ul>
-            <div id="Device">
+            <!--<div id="Device">
                 <li class="device-monitor"><a href="javascript:"><div class="icon-monitor active"></div></a></li>
                 <li class="device-mobile"><a href="javascript:"><div class="icon-tablet"></div></a></li>
                 <li class="device-mobile"><a href="javascript:"><div class="icon-mobile-1"></div></a></li>
                 <li class="device-mobile-2"><a href="javascript:"><div class="icon-mobile-2"></div></a></li>
                 <li class="device-mobile-3"><a href="javascript:"><div class="icon-mobile-3"></div></a></li>
-            </div>
+            </div>-->
             <!--<li class="top2">
                 <a href="">手机二维码预览</a>
                 <div class="vm">
@@ -135,9 +136,10 @@
                 </div>
             </li>-->
             <li class="logoTop">
-                <a href="">管理系统后台登录</a>            <script type="text/javascript">
-                jQuery('#output').qrcode({width:150,height: 150,text: window.location.href});
-            </script>
+                <a href="">管理系统后台登录</a>
+                <!--<script type="text/javascript">
+                    jQuery('#output').qrcode({width:150,height: 150,text: window.location.href});
+                </script>-->
             </li><li class="remove_frame"><a href="" title=""></a></li>
         </ul>
     </div>
