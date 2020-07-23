@@ -19,6 +19,13 @@ class Article extends Auth
     public function add_article(){
 
         $res = [];
+        $id = input('request.id');
+        if($id){
+            $data = Db::table('article')->where(['id'=>$id])->find();
+            if($data){
+                $res = $data;
+            }
+        }
         return View::fetch('add',$res);
     }
 
@@ -105,11 +112,31 @@ class Article extends Auth
             $sql = [
                 'title' => $article_title,
                 'content' => $article_content,
+                'article_menu' => $article_menu,
                 'author' => $article_author,
                 'status' => $article_status,
                 'create_time' => $article_create_time
             ];
             $insert_flag = Db::table('article')->insert($sql);
+            if($insert_flag){
+                return json_success();
+            }
+            return json_error(1002,'操作失败');
+        }catch(\Exception $e){
+            return json_error($e->getCode(),$e->getMessage());
+        }
+    }
+
+
+    //硬删除数据
+    public function delete_data(){
+        try{
+            $id = input('post.id');
+            if(!is_empty_parameter([$id])){
+                throw_error(4001,'参数错误');
+            }
+
+            $insert_flag = Db::table('article')->where(['id'=>$id])->delete();
             if($insert_flag){
                 return json_success();
             }

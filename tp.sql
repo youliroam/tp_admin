@@ -105,6 +105,7 @@ CREATE TABLE `article_menu` (
 CREATE TABLE `article` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '标题',
+  `article_menu` int(255) DEFAULT NULL COMMENT '文章分类',
   `content` text CHARACTER SET utf8 COMMENT '正文',
   `view` int(11) NOT NULL DEFAULT '0' COMMENT '访问量',
   `author` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '作者',
