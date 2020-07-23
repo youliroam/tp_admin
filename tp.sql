@@ -84,3 +84,52 @@ INSERT INTO `u_admin` VALUES (1, 'youli', 'e10adc3949ba59abbe56e057f20f883e', 20
 
 SET FOREIGN_KEY_CHECKS = 1;
 
+
+
+CREATE TABLE `article_menu` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `menu_name` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `parent_id` int(11) NOT NULL DEFAULT '0',
+  `status` tinyint(1) DEFAULT '1' COMMENT '状态：1，正常；0，删除',
+  `level` tinyint(255) NOT NULL DEFAULT '1' COMMENT '级别，1为第一级，2为第二级，，，',
+  `sort` int(11) DEFAULT '0' COMMENT '从大到小排序，越大越在前',
+  `remark` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '备注',
+  `create_time` bigint(20) NOT NULL COMMENT '创建时间',
+  `update_time` bigint(255) DEFAULT NULL COMMENT '更新时间',
+  `delete_time` bigint(255) DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+
+
+
+CREATE TABLE `article` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '标题',
+  `content` text CHARACTER SET utf8 COMMENT '正文',
+  `view` int(11) NOT NULL DEFAULT '0' COMMENT '访问量',
+  `author` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '作者',
+  `sort` int(255) DEFAULT '0' COMMENT '排序，越大越在前',
+  `status` tinyint(1) DEFAULT '1' COMMENT '状态：1，正常，0，删除',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT NULL COMMENT '修改时间',
+  `delete_time` timestamp NULL DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `sys_admin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(32) NOT NULL,
+  `login_laster_time` bigint(20) DEFAULT NULL,
+  `ip` varchar(20) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT '1' COMMENT '状态：1，正常；0，删除',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `create_time` bigint(20) NOT NULL COMMENT '创建时间',
+  `update_time` bigint(20) DEFAULT NULL COMMENT '修改时间',
+  `delete_time` bigint(20) DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+
+

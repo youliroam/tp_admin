@@ -72,13 +72,13 @@
         © youliroam.cn - 底部固定区域
     </div>
 </div>
-<script src="/static/layui/layui.js"></script>
-<script src="/static/js/jquery.min.js"></script>
+{include file="/common/iframe_bottom" /}
 <script>
     //JavaScript代码区域
     $(function(){
-        layui.use('element', function(){
+        layui.use(['element','layer'], function(){
             var element = layui.element;
+            var layer = layui.layer;
 
             get_menu();
             function get_menu(){
@@ -89,7 +89,6 @@
                     success:function(result){
                         var json_result = JSON.parse(result);
                         if(json_result.code == 1){
-                            //获取验证码成功
                             menu_one(json_result.data);
                         }else{
                             console.log(json_result);
@@ -100,7 +99,6 @@
 
             //菜单，把第一层添加进去
             function menu_one(menu){
-                console.log(menu);
                 var html = '';
                 $.each(menu,function(i,v){
                     html += '<li class="layui-nav-item">\n' +
@@ -135,7 +133,6 @@
                     html += children_html;
                 });
                 html += ' </dl> ';
-                console.log(html);
                 return html;
             }
 

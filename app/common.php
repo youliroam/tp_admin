@@ -65,7 +65,7 @@ if(!function_exists('time_millisecond')){
  *	抛出异常
  */
 if(!function_exists('throw_error')){
-    function throw_error($code,$message){
+    function throw_error($code=4444,$message='异常'){
         throw new \think\Exception($message, $code);
     }
 }
@@ -96,6 +96,22 @@ if(!function_exists('is_set_parameter')){
         return true;
     }
 }
+
+
+/**
+ * 验证是否全部设置过并且不为空
+ */
+if(!function_exists('is_empty_parameter')){
+    function is_empty_parameter($parameters){
+        foreach($parameters as $k=>$v){
+            if(!isset($v) || empty($v)){
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
 
 /**
  * 生成订单号

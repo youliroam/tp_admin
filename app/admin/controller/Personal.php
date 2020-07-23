@@ -36,12 +36,12 @@ class Personal extends Auth
                 if($new_password !== $confirm_password){
                     throw_error(40002,'两次密码不一致');
                 }
-                $u = Db::table('u_admin')->where(['username'=>$user_info['username'],'password'=>md5($old_password)])->find();
+                $u = Db::table('sys_admin')->where(['username'=>$user_info['username'],'password'=>md5($old_password)])->find();
                 if(!$u){
                     throw_error(10001,'密码错误');
                 }
 
-                $flag = Db::table('u_admin')->where(['username'=>$user_info['username']])->update(['password'=>md5($confirm_password)]);
+                $flag = Db::table('sys_admin')->where(['username'=>$user_info['username']])->update(['password'=>md5($confirm_password)]);
                 if($flag === false){
                     throw_error(10002,'密码设置失败');
                 }

@@ -49,7 +49,7 @@ class Account
                 throw_error(40001,'参数错误');
             }
 
-            $user = Db::table('u_admin')->where(['username'=>$username])->find();
+            $user = Db::table('sys_admin')->where(['username'=>$username])->find();
             if(!$user){
                 throw_error(40004,'用户不存在');
             }

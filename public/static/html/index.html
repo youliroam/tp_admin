@@ -4,7 +4,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <title>管理系统</title>
-    <link href="/static/css//login.css?v=2" rel="stylesheet" type="text/css">
+    <link href="/static/css/login.css?v=2" rel="stylesheet" type="text/css">
+    <link href="/static/layui/css/layui.css" rel="stylesheet" type="text/css">
     <style>
         .J_codeimg{z-index:-1;position:absolute;}
         .yanzhengma{
@@ -83,36 +84,41 @@
   <canvas id="canvas" width="1920" height="881"></canvas> 
 </div>
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/layui/layui.js"></script>
 <script>
     $(document).ready(function() {
-        //登录
-        $('#login-btn').on('click',function(){
-            var verify_code = $('#J_codetext').val().trim();
-            var username = $('#username').val().trim();
-            var password = $('#password').val().trim();
-            $.ajax({
-                type:'post',
-                url:"/admin/account/login_handle",
-                data: {username:username,password:password,verify_code:verify_code},
-                success:function(result){
-                    var json_result = JSON.parse(result);
-                    if(json_result.code == 1){
-                        //获取验证码成功
-                        top.location.href='/admin/home/index';
-                    }else{
-                        console.log(json_result);
+        layui.use(['element','layer','table'], function(){
+
+            //登录
+            $('#login-btn').on('click',function(){
+                var verify_code = $('#J_codetext').val().trim();
+                var username = $('#username').val().trim();
+                var password = $('#password').val().trim();
+                $.ajax({
+                    type:'post',
+                    url:"/admin/account/login_handle",
+                    data: {username:username,password:password,verify_code:verify_code},
+                    success:function(result){
+                        var json_result = JSON.parse(result);
+                        if(json_result.code == 1){
+                            //获取验证码成功
+                            top.location.href='/admin/home/index';
+                        }else{
+                            layer.msg(json_result.info);
+                        }
                     }
-                }
+                });
+            });
+
+            //清空
+            $('#clear-btn').on('click',function(){
+                $('#username').val('');
+                $('#password').val('');
+                $('#J_codetext').val('');
+                create_code();
             });
         });
 
-        //清空
-        $('#clear-btn').on('click',function(){
-            $('#username').val('');
-            $('#password').val('');
-            $('#J_codetext').val('');
-            create_code();
-        });
 
     });
 </script>

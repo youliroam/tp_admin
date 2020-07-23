@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {include file="/common/iframe_head" /}
+</head>
+<body>
+
+<style>
+    .iframe_content{
+        padding-top:20px;
+    }
+</style>
+
+<div class="iframe_box">
+    <div>
+        导航：xx/xx
+    </div>
+    <div class="iframe_content">
+        <div>
+            添加/编辑文章
+        </div>
+
+        <div class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+            <div class="layui-form-item">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" id="article_title" name="" style="width: 800px;" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">分类</label>
+                <div class="layui-input-inline" style="width: 800px;">
+                    <select id="article_menu" name="interest" lay-filter="article_menu">
+                        <option value="0">请选择分类</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">上架</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="article_status" value="1" title="上架" checked>
+                    <input type="radio" name="article_status" value="0" title="下架" >
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">内容</label>
+                <div class="layui-input-block">
+                    <textarea id="article_content" name="article_content" rows="5" style="display: none;"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">创建时间</label>
+                <div class="layui-input-block">
+                    <input type="text" id="article_create_time" style="width: 800px;" lay-verify="date" placeholder="yyyy-MM-dd H:i:s" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">作者</label>
+                <div class="layui-input-block">
+                    <input type="text" id="article_author" name="" style="width: 800px;" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn commit-btn">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary cancel-btn">重置</button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</body>
+{include file="/common/iframe_bottom" /}
+<script type="text/javascript" src="/static/HandyEditor-master/HandyEditor.min.js"></script>
+<script type="text/javascript">
+
+</script>
+<script>
+
+    $(function(){
+        layui.use(['element','layer','table','form','laydate'], function(){
+            var element = layui.element;
+            var layer = layui.layer;
+            var table = layui.table;
+            var form = layui.form;
+            var laydate = layui.laydate;
+
+            laydate.render({
+                elem: '#article_create_time' //指定元素
+                ,type: 'datetime'
+            });
+
+            //第一个实例
+            table.render({
+                elem: '#demo'
+                ,loading:true
+                ,height: 312
+                ,url: '/admin/article/articleList' //数据接口
+                ,page: true //开启分页
+                ,cols: [[ //表头
+                    {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+                    ,{field: 'title', title: '文章标题', width:250}
+                    ,{field: 'author', title: '作者', width:200}
+                    ,{field: 'create_time', title: '创建时间', width:180}
+                    ,{field: 'status', title: '状态', width:100
+                        ,templet: function(d){
+                            if(d.status == 1){
+                                return '正常';
+                            }else{
+                                return '删除';
+                            }
+                        }
+                    }
+                    ,{field: 'sort', title: '排序', width:100, sort: true}
+                    ,{fixed: 'right', width: 165, align:'center', toolbar: '#barDemo'}
+                ]]
+            });
+
+
+            getMenu();
+
+            function getMenu(){
+                $.ajax({
+                    type:'post',
+                    url:"/admin/article/getMenu",
+                    data: {},
+                    success:function(result){
+                        var json_result = JSON.parse(result);
+                        console.log(json_result);
+                        var menu_select_html = '';
+                        $.each(json_result.data,function(i,v){
+                            if(v.level > 1){
+                                menu_select_html += '<option value="'+v.id+'">'+meihua(v.level,v.menu_name)+'</option>';
+                            }else{
+                                menu_select_html += '<option value="'+v.id+'">'+v.menu_name+'</option>';
+                            }
+                        });
+                        $('#article_menu').append(menu_select_html);
+                        form.render('select');
+                    }
+                });
+            }
+
+            function meihua(level,v){
+                var a = '';
+                for(var i=1;i<level;i++){
+                    a += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                }
+                return a+'∟'+v;
+            }
+
+
+            //提交
+            $('.commit-btn').on('click',function(){
+                var article_title = $('#article_title').val().trim();
+                var article_menu = $('#article_menu').val();
+                var article_create_time = $('#article_create_time').val().trim();
+                var article_author = $('#article_author').val().trim();
+                var article_status =$("[name=article_status]:checked").val();
+                var article_content = he.getHtml();
+
+                var json_data = {
+                    article_title:article_title,
+                    article_menu:article_menu,
+                    article_create_time:article_create_time,
+                    article_author:article_author,
+                    article_status:article_status,
+                    article_content:article_content
+                };
+
+                $.ajax({
+                    type:'post',
+                    url:"/admin/article/addArticle",
+                    data: json_data,
+                    success:function(result){
+                        var json_result = JSON.parse(result);
+                        console.log(json_result);
+                        if(json_result.code == 1){
+                            layer.msg('操作成功',{icon:1});
+                            history.back(-1);
+                            //$("#home_ifram",parent.document).attr('src','/admin/article/add_article?id=0');
+                        }else{
+                            layer.msg('操作失败',{icon:5});
+                        }
+                    }
+                });
+
+
+
+            });
+            var he = HE.getEditor('article_content',{
+                width : '800px',
+                height : '400px',
+                autoHeight : true,
+                autoFloat : false,
+                topOffset : 0,
+                uploadPhoto : true,
+                uploadPhotoHandler : 'php/uploadPhoto.php',
+                uploadPhotoSize : 0,
+                uploadPhotoType : 'gif,png,jpg,jpeg',
+                uploadPhotoSizeError : '不能上传大于××KB的图片',
+                uploadPhotoTypeError : '只能上传gif,png,jpg,jpeg格式的图片',
+                lang : 'zh-jian',
+                skin : 'HandyEditor',
+                externalSkin : '',
+                item : ['bold','italic','strike','underline','fontSize','fontName','paragraph','color','backColor','|','center','left','right','full','indent','outdent','|','link','unlink','textBlock','code','selectAll','removeFormat','trash','|','image','expression','subscript','superscript','horizontal','orderedList','unorderedList','|','undo','redo','|','html','|','about']
+            });
+
+            function getHtml(){
+                alert(he.getHtml());
+            }
+            function getText(){
+                alert(he.getText());
+            }
+
+
+        });
+    });
+
+
+</script>
