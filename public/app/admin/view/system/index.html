@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {include file="/common/iframe_head" /}
+</head>
+<body>
+
+
+<div class="iframe_box">
+    <div>
+        导航
+    </div>
+    <div class="iframe_content">
+        <div>
+            基础设置
+        </div>
+        <form class="layui-form" action="">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">系统名称设置</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">底部信息</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">底部信息</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">确定</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+{include file="/common/iframe_bottom" /}
+<script>
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+
+</script>
+</html>

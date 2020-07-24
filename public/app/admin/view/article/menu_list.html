@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {include file="/common/iframe_head" /}
+</head>
+<body>
+
+<style>
+    .iframe_content{
+        padding-top:20px;
+    }
+</style>
+
+<div class="iframe_box">
+    <div>
+        导航：xx/xx
+    </div>
+    <div class="iframe_content">
+        <div>
+            操作栏目
+        </div>
+        <table id="demo" lay-filter="test"></table>
+    </div>
+</div>
+</body>
+{include file="/common/iframe_bottom" /}
+<script>
+    $(function(){
+        layui.use(['element','layer','table'], function(){
+            var element = layui.element;
+            var layer = layui.layer;
+            var table = layui.table;
+
+            //第一个实例
+            table.render({
+                elem: '#demo'
+               // ,height: 312
+                ,url: '/admin/article/menuList' //数据接口
+                ,page: false //开启分页
+                ,cols: [[ //表头
+                    {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+                    ,{field: 'menu_name', title: '分类名称', width:400
+                        ,templet: function(d){
+                            if(d.level > 1){
+                                return meihua(d.level,d.menu_name);
+                            }else{
+                                return  d.menu_name;
+                            }
+                        }
+                    }
+                    ,{field: 'sort', title: '排序', width:80, sort: true}
+                ]]
+            });
+
+
+
+            $('.queren-btn').on('click',function(){
+
+                $.ajax({
+                    type:'post',
+                    url:"/admin/personal/password",
+                    data: json_data,
+                    success:function(result){
+                        var json_result = JSON.parse(result);
+                        if(json_result.code == 1){
+                            layer.msg('修改成功', {icon: 1});
+                        }else{
+                            layer.msg(json_result.info,{icon: 5});
+                        }
+                        clear_val();
+                    }
+                });
+            });
+
+            function meihua(level,v){
+                var a = '';
+                for(var i=1;i<level;i++){
+                    a += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                }
+                return a+'∟'+v;
+            }
+
+
+
+        });
+    });
+
+
+</script>
