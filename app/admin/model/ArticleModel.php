@@ -33,9 +33,9 @@ class ArticleModel
             ->alias('a')
             ->field('a.*,am.menu_name')
             ->leftJoin('article_menu am','a.article_menu = am.id')
-            //->where(['a.status'=>1])
+            ->where('a.status','in',[0,1])
             ->page($page,$limit)->select()->toArray();
-        $account = Db::table('article')->count('id');
+        $account = Db::table('article')->where('status','in',[0,1])->count('id');
         $res['data'] = $data;
         $res['count'] = $account;
         return $res;

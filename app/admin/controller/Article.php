@@ -102,17 +102,19 @@ class Article extends Auth
         try{
             $article_id = input('post.article_id');
             $article_title = input('post.article_title');
+            $article_cover = input('post.article_cover');
             $article_menu = input('post.article_menu');
             $article_create_time = input('post.article_create_time');
             $article_author = input('post.article_author');
             $article_status = input('post.article_status');
             $article_content = input('post.article_content');
-            if(!is_set_parameter([$article_id,$article_title,$article_menu,$article_create_time,$article_author,$article_status,$article_content])){
+            if(!is_set_parameter([$article_id,$article_title,$article_cover,$article_menu,$article_create_time,$article_author,$article_status,$article_content])){
                 throw_error(4001,'参数错误');
             }
 
             $sql = [
                 'title' => $article_title,
+                'cover' => $article_cover,
                 'content' => htmlentities($article_content),
                 'article_menu' => $article_menu,
                 'author' => $article_author,
@@ -134,35 +136,21 @@ class Article extends Auth
     }
 
 
-    //硬删除数据
-    public function delete_data(){
-        try{
-            $id = input('post.id');
-            if(!is_empty_parameter([$id])){
-                throw_error(4001,'参数错误');
-            }
 
-            $insert_flag = Db::table('article')->where(['id'=>$id])->delete();
-            if($insert_flag){
-                return json_success();
-            }
-            return json_error(1002,'操作失败');
-        }catch(\Exception $e){
-            return json_error($e->getCode(),$e->getMessage());
-        }
-    }
-
-
-    //修改状态
+    //修改状态，排序
     public function update_data(){
         try{
             $id = input('post.id');
-            $status = input('post.status');
-            if(!is_set_parameter([$id,$status])){
+            $field = input('post.field');
+            $value = input('post.value');
+            if(!is_set_parameter([$id,$field,$value])){
                 throw_error(4001,'参数错误');
             }
+            $sql = [
+                $field=>$value
+            ];
 
-            $insert_flag = Db::table('article')->where(['id'=>$id])->update(['status'=>$status]);
+            $insert_flag = Db::table('article')->where(['id'=>$id])->update($sql);
             if($insert_flag){
                 return json_success();
             }

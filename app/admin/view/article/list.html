@@ -59,7 +59,7 @@
                     ,{field: 'status', title: '状态', width:100
                         ,templet: '#switchTpl', unresize: true
                     }
-                    ,{field: 'sort', title: '排序', width:100, sort: true}
+                    ,{field: 'sort', title: '排序', width:100, sort: true,edit: 'text'}
                     ,{fixed: 'right', width: 165, align:'center', toolbar: '#barDemo'}
                 ]]
             });
@@ -82,6 +82,33 @@
                     //同步更新缓存对应的值
                 }
             });
+            //监听单元格编辑
+            table.on('edit(test)', function(obj){
+                var value = obj.value //得到修改后的值
+                    ,data = obj.data //得到所在行所有键值
+                    ,field = obj.field; //得到字段
+                //layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+                if(field == 'sort'){
+                    var json_data = {
+                        id:data.id,
+                        field:'sort',
+                        value:value
+                    };
+                    $.ajax({
+                        type:'post',
+                        url:"/admin/article/update_data",
+                        data: json_data,
+                        success:function(result){
+                            var json_result = JSON.parse(result);
+                            if(json_result.code == 1){
+                                layer.msg('修改成功', {icon: 1});
+                            }else{
+                                layer.msg(json_result.info,{icon: 5});
+                            }
+                        }
+                    });
+                }
+            });
 
             //监听状态操作
             form.on('switch(yl_status)', function(obj){
@@ -92,7 +119,8 @@
                 }
                 var json_data = {
                     id:this.value,
-                    status:status
+                    field:'status',
+                    value:status
                 };
                 $.ajax({
                     type:'post',
@@ -119,8 +147,8 @@
             function delete_data(id){
                 $.ajax({
                     type:'post',
-                    url:"/admin/article/delete_data",
-                    data: {id:id},
+                    url:"/admin/article/update_data",
+                    data: {id:id,field:'status',value:2},
                     success:function(result){
                         var json_result = JSON.parse(result);
                         if(json_result.code == 1){

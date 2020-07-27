@@ -9,6 +9,9 @@
     .iframe_content{
         padding-top:20px;
     }
+    #article_cover{
+        max-width:400px;
+    }
 </style>
 
 <div class="iframe_box">
@@ -39,8 +42,23 @@
             <div class="layui-form-item" >
                 <label class="layui-form-label">上架</label>
                 <div class="layui-input-block">
-                    <input type="radio" lay-filter="yl_radio" name="article_status" value="1" title="上架" <?php echo (isset($status)&&$status==1)?'checked':'';?> />
+                    <input type="radio" lay-filter="yl_radio" name="article_status" value="1" title="上架" <?php echo ((isset($status)&&$status==1)||!isset($status))?'checked':'';?> />
                     <input type="radio" lay-filter="yl_radio" name="article_status" value="0" title="下架" <?php echo (isset($status)&&$status==0)?'checked':'';?> />
+                </div>
+            </div>
+
+            <div class="layui-form-item" >
+                <label class="layui-form-label">封面图</label>
+                <div class="layui-input-block">
+
+                    <div class="layui-upload">
+                        <button type="button" class="layui-btn" id="upload_cover">上传图片</button>
+                        <div class="layui-upload-list">
+                            <img class="layui-upload-img" id="article_cover" src="<?php echo isset($cover)?$cover:'';?>">
+                            <p id="demoText"></p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -108,12 +126,13 @@
     var old_content = '<?php echo isset($content)?html_entity_decode($content):"";?>';
 
     $(function(){
-        layui.use(['element','layer','table','form','laydate'], function(){
+        layui.use(['element','layer','table','form','laydate','upload'], function(){
             var element = layui.element;
             var layer = layui.layer;
             var table = layui.table;
             var form = layui.form;
             var laydate = layui.laydate;
+            var upload = layui.upload;
 
             laydate.render({
                 elem: '#article_create_time' //指定元素
@@ -146,6 +165,22 @@
                 ]]
             });
 
+            //执行实例
+            var uploadInst = upload.render({
+                elem: '#upload_cover' //绑定元素
+                ,url: '/admin/upload/cover' //上传接口
+                ,done: function(res){
+                    //上传完毕回调
+                    console.log(res);
+                    if(res.code==0){
+                        $('#article_cover').attr('src',res.data.src);
+                    }
+                }
+                ,error: function(){
+                    //请求异常回调
+                    layer.msg('服务器',{icon:5});
+                }
+            });
 
             getMenu();
 
@@ -191,6 +226,7 @@
             //提交
             $('.commit-btn').on('click',function(){
                 var article_title = $('#article_title').val().trim();
+                var article_cover = $('#article_cover').attr('src');
                 var article_menu = $('#article_menu').val();
                 var article_create_time = $('#article_create_time').val().trim();
                 var article_author = $('#article_author').val().trim();
@@ -212,10 +248,13 @@
                 }if(article_author.length==0){
                     layer.msg('作者必填',{icon:5});
                     return;
+                }if(article_cover == undefined){
+                    article_cover = '';
                 }
                 var json_data = {
                     article_id:old_id,
                     article_title:article_title,
+                    article_cover:article_cover,
                     article_menu:article_menu,
                     article_create_time:article_create_time,
                     article_author:article_author,
