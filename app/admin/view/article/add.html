@@ -36,11 +36,11 @@
                 </div>
             </div>
 
-            <div class="layui-form-item">
+            <div class="layui-form-item" >
                 <label class="layui-form-label">上架</label>
                 <div class="layui-input-block">
-                    <input type="radio" name="article_status" value="1" title="上架" checked>
-                    <input type="radio" name="article_status" value="0" title="下架" >
+                    <input type="radio" lay-filter="yl_radio" name="article_status" value="1" title="上架" <?php echo (isset($status)&&$status==1)?'checked':'';?> />
+                    <input type="radio" lay-filter="yl_radio" name="article_status" value="0" title="下架" <?php echo (isset($status)&&$status==0)?'checked':'';?> />
                 </div>
             </div>
 
@@ -84,6 +84,7 @@
 
     </div>
 </div>
+
 </body>
 {include file="/common/iframe_bottom" /}
 <script type="text/javascript" src="/static/HandyEditor-master/HandyEditor.min.js"></script>
@@ -196,6 +197,22 @@
                 var article_status =$("[name=article_status]:checked").val();
                 var article_content = he.getHtml();
 
+                if(article_title.length==0){
+                    layer.msg('标题必填',{icon:5});
+                    return;
+                }if(article_menu==0){
+                    layer.msg('分类必选',{icon:5});
+                    return;
+                }if(article_content.length==0){
+                    layer.msg('内容必填',{icon:5});
+                    return;
+                }if(article_create_time.length==0){
+                    layer.msg('创建时间必填',{icon:5});
+                    return;
+                }if(article_author.length==0){
+                    layer.msg('作者必填',{icon:5});
+                    return;
+                }
                 var json_data = {
                     article_id:old_id,
                     article_title:article_title,
@@ -226,6 +243,32 @@
 
 
             });
+
+            //清空
+            $('.cancel-btn').on('click',function(){
+                $('#article_title').val('');
+                $('#article_menu').val(0);
+                $('#article_create_time').val('');
+                $('#article_author').val('');
+                $("input:radio[name=article_status]").prop("checked",false);
+                $("input:radio[name=article_status]").eq(0).prop('checked',true);
+
+                he.set('');
+                form.render();
+            });
+
+            form.on('radio(yl_radio)', function(data){
+                //console.log(data.elem); //得到radio原始DOM对象
+                //console.log(data.value); //被点击的radio的value值
+                $("input:radio[name=article_status]").removeAttr("checked");
+                if(data.value == 1){
+                    $("input:radio[name=article_status]").eq(0).prop('checked',true);
+                }else{
+                    $("input:radio[name=article_status]").eq(1).prop('checked',true);
+                }
+            });
+
+
             var he = HE.getEditor('article_content',{
                 width : '800px',
                 height : '400px',

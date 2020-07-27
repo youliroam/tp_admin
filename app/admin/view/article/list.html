@@ -28,20 +28,26 @@
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
+
+<script type="text/html" id="switchTpl">
+    <!-- 这里的 checked 的状态只是演示 -->
+    <input type="checkbox" name="status" value="{{d.id}}" lay-skin="switch" lay-text="上架|下架" lay-filter="yl_status" {{ d.status == 1 ? 'checked' : '' }}>
+</script>
 </body>
 {include file="/common/iframe_bottom" /}
 <script>
     $(function(){
-        layui.use(['element','layer','table'], function(){
+        layui.use(['element','layer','table','form'], function(){
             var element = layui.element;
             var layer = layui.layer;
             var table = layui.table;
+            var form = layui.form;
 
             //第一个实例
             table.render({
                 elem: '#demo'
                 ,loading:true
-                ,height: 600
+                //,height: 600
                 ,url: '/admin/article/articleList' //数据接口
                 ,page: true //开启分页
                 ,cols: [[ //表头
@@ -51,13 +57,7 @@
                     ,{field: 'author', title: '作者', width:200}
                     ,{field: 'create_time', title: '创建时间', width:180}
                     ,{field: 'status', title: '状态', width:100
-                        ,templet: function(d){
-                            if(d.status == 1){
-                                return '上架';
-                            }else{
-                                return '下架';
-                            }
-                        }
+                        ,templet: '#switchTpl', unresize: true
                     }
                     ,{field: 'sort', title: '排序', width:100, sort: true}
                     ,{fixed: 'right', width: 165, align:'center', toolbar: '#barDemo'}
@@ -83,13 +83,20 @@
                 }
             });
 
-
-
-            $('.queren-btn').on('click',function(){
-
+            //监听状态操作
+            form.on('switch(yl_status)', function(obj){
+                //layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+                var status = 0;
+                if(obj.elem.checked){
+                    status = 1;
+                }
+                var json_data = {
+                    id:this.value,
+                    status:status
+                };
                 $.ajax({
                     type:'post',
-                    url:"/admin/personal/password",
+                    url:"/admin/article/update_data",
                     data: json_data,
                     success:function(result){
                         var json_result = JSON.parse(result);
@@ -98,10 +105,10 @@
                         }else{
                             layer.msg(json_result.info,{icon: 5});
                         }
-                        clear_val();
                     }
                 });
             });
+
 
             //点击添加文章
             $('.article-add-btn').on('click',function(){

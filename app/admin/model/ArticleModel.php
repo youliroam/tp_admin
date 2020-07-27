@@ -25,12 +25,20 @@ class ArticleModel
 
     //文章列表
     public function articleList($page=1,$limit=10){
+        $res = [
+            'data' => [],
+            'count' => 0
+        ];
         $data = Db::table('article')
             ->alias('a')
             ->field('a.*,am.menu_name')
             ->leftJoin('article_menu am','a.article_menu = am.id')
-            ->where(['a.status'=>1])->page($page,$limit)->select()->toArray();
-        return $data;
+            //->where(['a.status'=>1])
+            ->page($page,$limit)->select()->toArray();
+        $account = Db::table('article')->count('id');
+        $res['data'] = $data;
+        $res['count'] = $account;
+        return $res;
     }
 
 
