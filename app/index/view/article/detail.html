@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html class="js" lang="en-US">
+<head>
+    <meta name="baidu_union_verify" content="96cd64de75fb2436e609ed9d235585a5">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{$title}</title>
+    <link rel="icon" href="/static/youli/img/yl-logo.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/static/youli/img/yl-logo.ico" type="image/x-icon">
+
+    <link rel="stylesheet" id="font-awesome-css" href="/static/youli/font-awesome/css/font-awesome.min.css" type="text/css" media="all">
+    <link rel="stylesheet" id="indite-style-css" href="/static/youli/resource/style.css" type="text/css" media="all">
+    <link rel="stylesheet" id="youli-css" href="/static/youli/resource/youli-index.css" type="text/css" media="all">
+
+    <style id="indite-style-inline-css" type="text/css">
+        #wrapper{
+            height:auto;
+        }
+    </style>
+
+</head>
+
+<body class="home blog wp-custom-logo col-2cr full-width skew-active logged-out">
+
+<div id="wrapper">
+
+    <div id="wrapper-inner">
+        {include file="../app/index/view/common/menu.html" /}
+        <!--主页面-->
+        <div class="main" id="page">
+            <div class="main-inner group">
+                <div class="content yl_contents">
+                    <article id="post-68"
+                             class="post-68 post type-post status-publish format-image has-post-thumbnail hentry category-general category-travel post_format-post-format-image">
+                        <div class="post-wrapper group">
+                            <div class="entry-media">
+                                <a href="javascript:void(0);">
+                                    <div class="image-container">
+                                        <img width="720" height="405"
+                                             src="<?php echo $cover;?>"
+                                             class="attachment-indite-large size-indite-large wp-post-image" alt=""
+                                             srcset="<?php echo $cover;?> 720w, <?php echo $cover;?> 520w"
+                                             sizes="(max-width: 720px) 100vw, 720px"></div>
+                                </a>
+                            </div>
+                            <header class="entry-header group">
+                                <h2 class="entry-title">
+                                    <a href="javascript:void(0);" rel="bookmark">{$title}</a>
+                                </h2>
+                                <div class="entry-meta">
+                                    <span class="entry-date">
+                                        <i class="far fa-calendar"></i>{$create_time}
+                                    </span>
+                                    <span class="entry-comments">
+                                        <i class="far fa-comment"></i><a href="javascript:void(0);">{$view}</a>
+                                    </span>
+                                    <span class="entry-author">
+                                        <i class="far fa-user"></i><a href="javascript:void(0);" title="rabbitmq" rel="author">{$author}</a>
+                                    </span>
+                                    <span class="entry-category">
+                                        <a href="javascript:void(0);" rel="category tag">{$menu_name}</a>
+                                    </span>
+                                </div>
+                            </header>
+                            <div class="entry-content">
+                                <div class="entry themeform">
+                                    <p>
+                                        <?php echo $content;?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </article>
+                </div>
+                <div id="move-sidebar-content"></div>
+
+            </div><!--/.main-inner-->
+
+            <footer id="footer">
+
+                <div id="footer-bottom">
+                    <a id="back-to-top" href="/#"><i class="fa fa-angle-up"></i></a>
+                    <div class="pad group">
+                        <div class="grid one-full">
+                            <img id="footer-logo" src="/static/youli/img/yl-logo-1.0-200.png" alt="Indite">
+                        </div>
+                        <div class="grid one-full">
+                            <ul class="social-links">
+                                <li><a rel="nofollow" class="social-tooltip" title="baidu"
+                                       href="/#11"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a rel="nofollow" class="social-tooltip" title="qq"
+                                       href="/#12"><i class="fab fa-twitter"></i></a></li>
+                                <li><a rel="nofollow" class="social-tooltip" title="163"
+                                       href="/#13"><i class="fab fa-google"></i></a></li>
+                                <li><a rel="nofollow" class="social-tooltip" title="taobao"
+                                       href="/#14"><i class="fab fa-dribbble"></i></a></li>
+                                <li><a rel="nofollow" class="social-tooltip" title="360"
+                                       href="/#15"><i class="fab fa-github"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="grid one-full">
+                            <div id="copyright">
+                                <p>Copyright youliroam All Rights Reserved</p>
+                                <p><a href="http://www.beian.miit.gov.cn">粤ICP备20030391号</a></p>
+                                <div style="width:300px;margin:0 auto; padding:20px 0;">
+                                    <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030602004525" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">
+                                        <img src="/static/youli/img/gonganbeian.png" style="float:left;"/>
+                                        <p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">粤公网安备 44030602004525号</p></a>
+                                </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+            </footer>
+        </div>
+    </div>
+</div>
+</body>
+
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/youli/resource/scripts.js"></script>
+<script>
+    $(function(){
+        console.log(123);
+    });
+
+</script>
+</html>

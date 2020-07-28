@@ -2,18 +2,72 @@
 namespace app\index\controller;
 
 use app\BaseController;
+use think\facade\Db;
 use think\facade\View;
 
 class Index extends BaseController
 {
+
     public function index()
     {
-        $res = [];
+        $keyword = input('get.keyword');
+        $where = [['a.status','=',1]];
+        $where_count = [['status','=',1]];
+        if(isset($keyword)){
+            $where[] = ['a.title','like','%'.$keyword.'%'];
+            $where_count[] = ['title','like','%'.$keyword.'%'];
+        }
+
+        $data = Db::table('article')
+            ->alias('a')
+            ->field('a.*,am.menu_name')
+            ->leftJoin('article_menu am','a.article_menu = am.id')
+            ->where($where)
+            ->page(1,5)->select()->toArray();
+        $account = Db::table('article')
+            ->where($where_count)
+            ->count('id');
+        foreach($data as $k=>$v){
+            $data[$k]['content'] = html_entity_decode($v['content']);
+        }
+        $res = [
+            'data' => $data,
+            'count' => $account
+        ];
         return View::fetch('index',$res);
     }
 
     public function hello($name = 'ThinkPHP6')
     {
         return 'hello,' . $name;
+    }
+
+
+
+    //获取菜单
+    public function menu(){
+        $res = $this->get_menu();
+        return json_success(1,'success',$res);
+    }
+
+    //处理菜单
+    private function get_menu(){
+        $data = Db::table('article_menu')->where(['status'=>1])->order('sort','asc')->select()->toArray();
+        if($data){
+            return $this->dg($data,0);
+        }
+        return [];
+    }
+
+    //递归查询所有子菜单
+    private function dg($data,$parent_id){
+        $res = [];
+        foreach($data as $k=>$vv){
+            if($vv['parent_id'] == $parent_id){
+                $vv['child'] = $this->dg($data,$vv['id']) ?:[];
+                $res[] = $vv;
+            }
+        }
+        return $res;
     }
 }
