@@ -32,7 +32,7 @@ class ArticleModel
         $data = Db::table('article')
             ->alias('a')
             ->field('a.*,am.menu_name')
-            ->leftJoin('article_menu am','a.article_menu = am.id')
+            ->leftJoin('article_menu am','a.article_menu_id = am.id')
             ->where('a.status','in',[0,1])
             ->page($page,$limit)->select()->toArray();
         $account = Db::table('article')->where('status','in',[0,1])->count('id');

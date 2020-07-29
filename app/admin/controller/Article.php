@@ -116,7 +116,7 @@ class Article extends Auth
                 'title' => $article_title,
                 'cover' => $article_cover,
                 'content' => htmlentities($article_content),
-                'article_menu' => $article_menu,
+                'article_menu_id' => $article_menu,
                 'author' => $article_author,
                 'status' => $article_status,
                 'create_time' => $article_create_time

@@ -11,22 +11,25 @@ class Index extends BaseController
     public function index()
     {
         $keyword = input('get.keyword');
+        $menu_id = input('get.menu_id');
         $where = [['a.status','=',1]];
-        $where_count = [['status','=',1]];
-        if(isset($keyword)){
+        if(isset($keyword) && !isset($menu_id)){
             $where[] = ['a.title','like','%'.$keyword.'%'];
-            $where_count[] = ['title','like','%'.$keyword.'%'];
+        }else if(!isset($keyword) && isset($menu_id)){
+            $where[] = ['am.id','=',$menu_id];
         }
-
         $data = Db::table('article')
             ->alias('a')
             ->field('a.*,am.menu_name')
-            ->leftJoin('article_menu am','a.article_menu = am.id')
+            ->leftJoin('article_menu am','a.article_menu_id = am.id')
             ->where($where)
             ->page(1,5)->select()->toArray();
         $account = Db::table('article')
-            ->where($where_count)
-            ->count('id');
+            ->alias('a')
+            ->field('a.*,am.menu_name')
+            ->leftJoin('article_menu am','a.article_menu_id = am.id')
+            ->where($where)
+            ->count('a.id');
         foreach($data as $k=>$v){
             $data[$k]['content'] = html_entity_decode($v['content']);
         }
